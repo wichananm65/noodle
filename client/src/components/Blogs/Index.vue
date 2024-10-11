@@ -73,6 +73,24 @@ let LOAD_NUM = 3
 let pageWatcher
 
 export default {
+    data() {
+        return {
+            BASE_URL: "http://localhost:8081/assets/uploads/",
+            blogs: [],
+            search: '',
+            results: [],
+            category: [],
+            loading: false
+        }
+    },
+    async created() {
+        // Fetch all blogs when the component is created
+        this.loading = true;
+        this.results = (await BlogsService.index()).data;
+        this.blogs = this.results; // Set blogs to show all by default
+        this.category = [...new Set(this.results.map(blog => blog.category))]; // Unique categories
+        this.loading = false;
+    },
     updated() {
         let sens = document.querySelector('#blog-list-bottom')
         pageWatcher = ScrollMonitor.create(sens)
@@ -88,49 +106,18 @@ export default {
         search: _.debounce(function (value) {
             // Filtering happens in the computed property
             console.log('search: ' + value)
-        }, 700),
-        '$route.query.search': {
-            immediate: true,
-            async handler(value) {
-                this.blogs = []
-                this.results = []
-                this.loading = true
-                this.results = (await BlogsService.index(value)).data
-                this.appendResults()
-                this.results.forEach(blog => {
-                    if (this.category.length > 0) {
-                        if (this.category.indexOf(blog.category) === -1) {
-                            this.category.push(blog.category)
-                        }
-                    } else {
-                        this.category.push(blog.category)
-                    }
-                })
-                this.loading = false
-                this.search = value
-            }
-        }
+        }, 700)
     },
     computed: {
         filteredBlogs() {
             if (this.search.trim() === '') {
-                return this.results;
+                return this.blogs; // Return all blogs by default
             }
-            return this.results.filter(blog => {
+            return this.blogs.filter(blog => {
                 return blog.title.toLowerCase().includes(this.search.toLowerCase()) ||
                     blog.content.toLowerCase().includes(this.search.toLowerCase()) ||
                     blog.category.toLowerCase().includes(this.search.toLowerCase());
             });
-        }
-    },
-    data() {
-        return {
-            BASE_URL: "http://localhost:8081/assets/uploads/",
-            blogs: [],
-            search: '',
-            results: [],
-            category: [],
-            loading: false
         }
     },
     methods: {
@@ -166,7 +153,8 @@ export default {
             }
         },
         async refreshData() {
-            this.blogs = (await BlogsService.index()).data
+            this.results = (await BlogsService.index()).data;
+            this.blogs = this.results; // Refresh blogs to show all
         }
     }
 }
