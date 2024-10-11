@@ -1,40 +1,61 @@
 <template>
     <div>
-        <h1>Show Noodle</h1>
+
+        <div class="container">
+            <br><br>
+            <!-- Display Thumbnail -->
+        <div class="noodle-pic">
+            <div class="thumbnail-pic" v-if="noodle.thumbnail !== 'null'">
+                <img :src="BASE_URL + noodle.thumbnail" alt="thumbnail">
+            </div>
+        </div>
+
+        <!-- Noodle Information -->
         <p>id: {{ noodle.id }}</p>
-        <p>brand: {{ noodle.brand }}</p>
-        <p>taste: {{ noodle.taste }}</p>
-        <p>production: {{ noodle.production }}</p>
+        <p>ยี่ห้อ: {{ noodle.brand }}</p>
+        <p>รสชาติ: {{ noodle.taste }}</p>
+        <p>ผลิตที่: {{ noodle.production }}</p>
         <p>
-        <button v-on:click="navigateTo('/noodle/edit/' + noodle.id)">แก้ไข noodle</button>
-        <button v-on:click="navigateTo('/noodles')">กลับ</button>
+            <button v-on:click="navigateTo('/noodle/edit/'+ noodle.id)" class="btn btn-warning">แก้ไข</button>
+            <button v-on:click="navigateTo('/noodles')" class="btn btn-info">กลับ </button>
         </p>
+        </div>
+
     </div>
 </template>
 
 <script>
     import NoodlesService from '@/services/NoodlesService'
+
     export default {
-        data () {
+        data() {
             return {
-                noodle: null
+                noodle: null,
+                BASE_URL: "http://localhost:8081/assets/uploads/"
             }
         },
-        async created () {
+        async created() {
             try {
                 let noodleId = this.$route.params.noodleId
                 this.noodle = (await NoodlesService.show(noodleId)).data
             } catch (error) {
-                console.log (error)
+                console.log(error)
             }
         },
-        methods : {
-            navigateTo (route) {
+        methods: {
+            navigateTo(route) {
                 this.$router.push(route)
-            },
+            }
         }
     }
 </script>
 
 <style scoped>
+.thumbnail-pic img {
+    width: 200px;
+    padding: 5px 10px 0px 0px;
+}
+.noodle-pic {
+    margin-bottom: 20px;
+}
 </style>

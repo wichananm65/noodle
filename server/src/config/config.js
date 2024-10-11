@@ -1,7 +1,7 @@
 module.exports = {
     port: 8081,
     db: {
-        database: process.env.DB_NAME || 'noodleDB',
+        database: process.env.DB_NAME || 'noodleDb',
         user: process.env.DB_User || 'root',
         password: process.env.DB_PASS || '',
         options: {

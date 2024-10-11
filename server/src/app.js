@@ -15,6 +15,7 @@ app.use('/assets', express.static('public'));
 
 // import routes
 
+require('./userPassport');
 require('./routes')(app);
 
 

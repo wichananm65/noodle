@@ -1,8 +1,15 @@
 <template>
-  <div>
+  <div class="container">
+    <br>
     <h1>Edit Noodle</h1>
     <form v-on:submit.prevent="editNoodle">
-      <p>brand: <input type="text" v-model="noodle.brand" /></p>
+      <p>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm">ยี่ห้อ</span>
+          <input type="text" v-model="noodle.brand" class="form-control" aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm">
+        </div>
+        </p>
       <transition name="fade">
         <div class="thumbnail-pic" v-if="noodle.thumbnail != 'null'">
           <img :src="BASE_URL + noodle.thumbnail" alt="thumbnail" />
@@ -46,18 +53,22 @@
         </li>
       </transition-group>
       <div class="clearfix"></div>
-      <p><strong>content:</strong></p>
-      <vue-ckeditor
-        v-model.lazy="noodle.content"
-        :config="config"
-        @blur="onBlur($event)"
-        @focus="onFocus($event)"
-      />
-      <p>Production: <input type="text" v-model="noodle.production" /></p>
       <p>
-        <button type="submit">update noodle</button>
-        <button v-on:click="navigateTo('/noodles')">กลับ</button>
-      </p>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm">รสชาติ</span>
+          <input type="text" v-model="noodle.taste" class="form-control" aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm">
+        </div>
+        </p>
+
+        <p>
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">ผลิตที่</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" vue-ckeditor v-model.lazy="noodle.production"></textarea>
+        </div>
+          <br>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </p>
     </form>
   </div>
 </template>
@@ -88,9 +99,8 @@ export default {
         brand: "",
         thumbnail: "null",
         pictures: "null",
-        content: "",
+        taste: "",
         production: "",
-        status: "",
       },
       config: {
         toolbar: [

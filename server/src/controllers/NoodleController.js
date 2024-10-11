@@ -1,50 +1,29 @@
-const { Noodle } = require('../models');
-
+const { Noodle } = require('../models')
 module.exports = {
+    // get all noodle
     async index(req, res) {
         try {
-            let noodles = null
-            const search = req.query.search
-            // console.log('search key: ' + search)
-            if (search) {
-                noodles = await Noodle.findAll({
-                    where: {
-                        $or: [
-                            'title', 'content', 'category'
-                        ].map(key => ({
-                            [key]: {
-                                $like: `%${search}%`,
-                            }
-                        })),
-                    },
-                    order: [['updatedAt', 'DESC']]
-                })
-            } else {
-                noodles = await Noodle.findAll({
-                    order: [['updatedAt', 'DESC']]
-                })
-            }
+            const noodles = await Noodle.findAll()
             res.send(noodles)
         } catch (err) {
             res.status(500).send({
-                error: 'an error has occured trying to fetch the noodles'
+                error: 'The noodles information was incorrect'
             })
         }
     },
-
+    // create noodle
     async create(req, res) {
+        // res.send(JSON.stringify(req.body))
         try {
-            console.log('Noodle create req.body:', req.body)
             const noodle = await Noodle.create(req.body)
-            console.log('Noodle create Noodle:', noodle)
             res.send(noodle.toJSON())
         } catch (err) {
-            console.log('Noodle create err:', err)
             res.status(500).send({
                 error: 'Create noodle incorrect'
             })
         }
     },
+    // edit noodle, suspend, active
     async put(req, res) {
         try {
             await Noodle.update(req.body, {
@@ -59,7 +38,7 @@ module.exports = {
             })
         }
     },
-
+    // delete noodle
     async remove(req, res) {
         try {
             const noodle = await Noodle.findOne({
@@ -80,7 +59,7 @@ module.exports = {
             })
         }
     },
-
+    // get noodle by id
     async show(req, res) {
         try {
             const noodle = await Noodle.findByPk(req.params.noodleId)

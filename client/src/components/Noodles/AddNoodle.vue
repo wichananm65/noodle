@@ -1,75 +1,63 @@
 <template>
   <div>
-    <h1>-</h1>
+    <h1></h1>
     <form v-on:submit.prevent="addNoodle">
       <div class="container">
         <h2>Add Noodle</h2>
-      <p>
-        ยี่ห้อ:
-        <input type="text" v-model="noodle.brand" />
-      </p>
-      <transition name="fade">
-        <div class="thumbnail-pic" v-if="noodle.thumbnail !== 'null'">
-          <img :src="BASE_URL + noodle.thumbnail" alt="thumbnail" />
+        <p>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm">ยี่ห้อ</span>
+          <input type="text" v-model="noodle.brand" class="form-control" aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm">
         </div>
-      </transition>
-      <div class="dropbox">
-        <input
-          type="file"
-          multiple
-          :name="uploadFieldName"
-          :disabled="isSaving"
-          @change="
-            filesChange($event.target.name, $event.target.files);
-            fileCount = $event.target.files.length;
-          "
-          accept="image/*"
-          class="input-file"
-        />
-        <p v-if="isInitial">
-          Drag your file(s) here to begin<br />
-          or click to browse
         </p>
-        <p v-if="isSaving">Uploading {{ fileCount }} files...</p>
-        <p v-if="isSuccess">Upload Successful.</p>
-      </div>
-      <div>
-        <transition-group tag="ul" class="pictures">
-          <li v-for="picture in pictures" v-bind:key="picture.id">
-            <img
-              style="margin-bottom: 5px"
-              :src="BASE_URL + picture.name"
-              alt="picture image"
-            />
-            <br />
-            <button v-on:click.prevent="useThumbnail(picture.name)">
-              Thumbnail
-            </button>
-            <button v-on:click.prevent="delFile(picture)">Delete</button>
-          </li>
-        </transition-group>
-        <div class="clearfix"></div>
-      </div>
-      
-      <p>
-        รสชาติ:
-        <input type="text" v-model="noodle.taste" />
-      </p>
+        <transition name="fade">
+          <div class="thumbnail-pic" v-if="noodle.thumbnail !== 'null'">
+            <img :src="BASE_URL + noodle.thumbnail" alt="thumbnail" />
+          </div>
+        </transition>
+        <div class="dropbox">
+          <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="
+            filesChange($event.target.name, $event.target.files);
+          fileCount = $event.target.files.length;
+          " accept="image/*" class="input-file" />
+          <p v-if="isInitial">
+            Drag your file(s) here to begin<br />
+            or click to browse
+          </p>
+          <p v-if="isSaving">Uploading {{ fileCount }} files...</p>
+          <p v-if="isSuccess">Upload Successful.</p>
+        </div>
+        <div>
+          <transition-group tag="ul" class="pictures">
+            <li v-for="picture in pictures" v-bind:key="picture.id">
+              <img style="margin-bottom: 5px" :src="BASE_URL + picture.name" alt="picture image" />
+              <br />
+              <button v-on:click.prevent="useThumbnail(picture.name)">
+                Thumbnail
+              </button>
+              <button v-on:click.prevent="delFile(picture)">Delete</button>
+            </li>
+          </transition-group>
+          <div class="clearfix"></div>
+        </div>
+        <p>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm">รสชาติ</span>
+          <input type="text" v-model="noodle.taste" class="form-control" aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm">
+        </div>
+        </p>
 
-      <p>
-        <strong>ผลิตที่:</strong>
-      </p>  
-      <vue-ckeditor
-        v-model.lazy="noodle.production"
-        :config="config"
-        @blur="onBlur($event)"
-        @focus="onFocus($event)"
-      />
-      
-      <p>
-        <button type="submit">Add</button>
-      </p>
-      </div>      
+        <p>
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">ผลิตที่</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" vue-ckeditor v-model.lazy="noodle.production"></textarea>
+        </div>
+          <br>
+          <button type="submit" class="btn btn-success">Add</button>
+        </p>
+      </div>
     </form>
   </div>
 </template>
@@ -218,6 +206,7 @@ export default {
   position: relative;
   cursor: pointer;
 }
+
 .input-file {
   opacity: 0;
   width: 100%;
@@ -235,6 +224,7 @@ export default {
   text-align: center;
   padding: 50px 0;
 }
+
 ul.pictures {
   list-style: none;
   padding: 0;
@@ -243,16 +233,20 @@ ul.pictures {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
 ul.pictures li {
   float: left;
 }
+
 ul.pictures li img {
   max-width: 180px;
   margin-right: 20px;
 }
+
 .clearfix {
   clear: both;
 }
+
 .thumbnail-pic img {
   width: 200px;
 }

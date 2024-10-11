@@ -3,8 +3,8 @@ module.exports = (sequelize, DataTypes) => {
         brand: DataTypes.STRING,
         thumbnail: DataTypes.STRING,
         pictures: DataTypes.TEXT,
-        taste: DataTypes.TEXT,
-        production: DataTypes.STRING,
+        taste: DataTypes.STRING,
+        production: DataTypes.TEXT,
     })
     return Noodle
 }

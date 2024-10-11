@@ -13,10 +13,10 @@ export default {
     post(noodle) {
         return Api().post('noodle', noodle)
     },
-    put(noodles) {
-        return Api().put('noodle/' + noodles.id, noodle)
+    put(noodle) {
+        return Api().put('noodle/' + noodle.id, noodle)
     },
-    delete(noodles) {
-        return Api().delete('noodle/' + noodles.id, noodle)
+    delete(noodle) {
+        return Api().delete('noodle/' + noodle.id, noodle)
     },
 }
