@@ -33,10 +33,10 @@
             <li v-for="picture in pictures" v-bind:key="picture.id">
               <img style="margin-bottom: 5px" :src="BASE_URL + picture.name" alt="picture image" />
               <br />
-              <button v-on:click.prevent="useThumbnail(picture.name)">
-                Thumbnail
+              <button v-on:click.prevent="useThumbnail(picture.name)" class="btn btn-warning">
+                เลือก
               </button>
-              <button v-on:click.prevent="delFile(picture)">Delete</button>
+              <button v-on:click.prevent="delFile(picture)" class="btn btn-danger">ลบ</button>
             </li>
           </transition-group>
           <div class="clearfix"></div>

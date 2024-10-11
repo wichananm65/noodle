@@ -46,10 +46,10 @@
             alt="picture image"
           />
           <br />
-          <button v-on:click.prevent="useThumbnail(picture.name)">
-            Thumbnail
+          <button v-on:click.prevent="useThumbnail(picture.name)" class="btn btn-warning">
+            เลือก
           </button>
-          <button v-on:click.prevent="delFile(picture)">Delete</button>
+          <button v-on:click.prevent="delFile(picture)" class="btn btn-danger">ลบ</button>
         </li>
       </transition-group>
       <div class="clearfix"></div>
