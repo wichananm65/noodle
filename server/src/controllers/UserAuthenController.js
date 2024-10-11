@@ -1,8 +1,8 @@
-const {User} = require('../models');
+const { User } = require('../models');
 const config = require('../config/config');
 const jwt = require('jsonwebtoken');
 
-function jwtSignUser (user) {
+function jwtSignUser(user) {
     const ONE_WEEK = 60 * 60 * 24 * 7;
     return jwt.sign(user, config.authentication.jwtSecret, {
         expiresIn: ONE_WEEK
@@ -10,44 +10,91 @@ function jwtSignUser (user) {
 }
 
 module.exports = {
-    async register (req, res) {
+    async register(req, res) {
         try {
             const user = await User.create(req.body);
             res.send(user.toJSON());
         } catch (err) {
             res.status(400).send({
-                error: 'The content information was incorrect'
+                error: 'The taste information was incorrect'
             })
         }
     },
-    async login (req, res) {
+    async login(req, res) {
         try {
-            const {email, password} = req.body;
+            const { email, password } = req.body
             const user = await User.findOne({
                 where: {
                     email: email
+                    // password: password
+                    // status: 'active'
                 }
-            });
+            })
             if (!user) {
                 return res.status(403).send({
-                    error: 'User/Password was incorrect'
+                    error: 'User/Password not correct'
                 })
             }
-            const isPasswordValid = await user.comparePassword(password);
+            const isPasswordValid = await user.comparePassword(password)
             if (!isPasswordValid) {
                 return res.status(403).send({
-                    error: 'User/Password was incorrect'
+                    error: 'User/Password not correct'
                 })
             }
-            const userJson = user.toJSON();
+            if (user.type != "admin") {
+                357
+                return res.status(403).send({
+                    error: 'Permission not correct'
+                })
+            }
+            const userJSON = user.toJSON()
+
             res.send({
-                user: userJson,
-                token: jwtSignUser(userJson)
+                user: userJSON,
+                token: jwtSignUser(userJSON)
             })
-        } catch (err) {
+
+        } catch (error) {
             res.status(500).send({
                 error: 'Error! from get user'
             })
         }
-    }
+    },
+    async clientLogin(req, res) {
+        try {
+            const { email, password } = req.body
+            const user = await User.findOne({
+                where: {
+                    email: email
+                    // password: password
+                    // status: 'active'
+                }
+            })
+            if (!user) {
+                return res.status(403).send({
+                    error: 'User/Password not correct'
+                })
+            }
+            358
+            const isPasswordValid = await user.comparePassword(password)
+            if (!isPasswordValid) {
+                return res.status(403).send({
+                    error: 'User/Password not correct'
+                })
+            }
+            // dont't check permission type
+
+            const userJSON = user.toJSON()
+
+            res.send({
+                user: userJSON,
+                token: jwtSignUser(userJSON)
+            })
+
+        } catch (error) {
+            res.status(500).send({
+                error: 'Error! from get user'
+            })
+        }
+    },
 }

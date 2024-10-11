@@ -1,7 +1,7 @@
 const UserController = require('./controllers/UserController');
 const UserAuthenController = require('./controllers/UserAuthenController');
 const isAuthenController = require('./authen/isAuthenController');
-const BlogController = require('./controllers/BlogController');
+const NoodleController = require('./controllers/NoodleController');
 
 let multer = require("multer")
 
@@ -19,17 +19,18 @@ let storage = multer.diskStorage({
 let upload = multer({ storage: storage }).array("userPhoto", 10)
 
 module.exports = (app) => {
+    app.post('/front/login', UserAuthenController.clientLogin);
     app.get('/users', isAuthenController, UserController.index);
     app.get('/user/:userId', UserController.show);
     app.post('/user', UserController.create);
     app.put('/user/:userId', UserController.put);
     app.delete('/user/:userId', UserController.remove);
     app.post('/login', UserAuthenController.login);
-    app.post('/blog', BlogController.create);
-    app.put('/blog/:blogId', BlogController.put);
-    app.delete('/blog/:blogId', BlogController.remove);
-    app.get('/blog/:blogId', BlogController.show);
-    app.get('/blogs', BlogController.index);
+    app.post('/noodle', NoodleController.create);
+    app.put('/noodle/:noodleId', NoodleController.put);
+    app.delete('/noodle/:noodleId', NoodleController.remove);
+    app.get('/noodle/:noodleId', NoodleController.show);
+    app.get('/noodles', NoodleController.index);
 
     // upload
     app.post("/upload", function (req, res) {
@@ -42,21 +43,21 @@ module.exports = (app) => {
         })
     }),
 
-    //delete file uploaded function
-    app.post('/upload/delete', async function (req, res) {
-        try {
-            const fs = require('fs'); 
-            console.log(req.body.filename)
+        //delete file uploaded function
+        app.post('/upload/delete', async function (req, res) {
+            try {
+                const fs = require('fs');
+                console.log(req.body.filename)
 
-            fs.unlink(process.cwd() + '/public/uploads/' + req.body.filename, (err) => {
-                if (err) throw err;
-                res.send("Delete sucessful")
-                // console.log('successfully deleted material file');
-            });
-        } catch (err) {
-            res.status(500).send({
-                error: 'An error has occured trying to delete file the material'
-            })
-        }
-    })
+                fs.unlink(process.cwd() + '/public/uploads/' + req.body.filename, (err) => {
+                    if (err) throw err;
+                    res.send("Delete sucessful")
+                    // console.log('successfully deleted material file');
+                });
+            } catch (err) {
+                res.status(500).send({
+                    error: 'An error has occured trying to delete file the material'
+                })
+            }
+        })
 }

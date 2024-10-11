@@ -9,10 +9,10 @@ import Login from '@/components/Login'
 
 import CommentIndex from '@/components/Comments/index' 
 
-import BlogIndex from '@/components/Blogs/index'
-import BlogCreate from '@/components/Blogs/CreateBlog'
-import BlogShow from '@/components/Blogs/ShowBlog'
-import BlogEdit from '@/components/Blogs/EditBlog'
+import NoodleIndex from '@/components/Noodles/index'
+import NoodleAdd from '@/components/Noodles/AddNoodle'
+import NoodleShow from '@/components/Noodles/ShowNoodle'
+import NoodleEdit from '@/components/Noodles/EditNoodle'
 
 import Upload from '@/components/Util/Upload'
 
@@ -47,24 +47,24 @@ export default new Router({
       component: Login
     },
     {
-      path: '/blogs',
-      name: 'blogs',
-      component: BlogIndex
+      path: '/noodles',
+      name: 'noodles',
+      component: NoodleIndex
     },
     {
-      path: '/blog/create',
-      name: 'blog-create',
-      component: BlogCreate
+      path: '/noodle/add',
+      name: 'noodle-add',
+      component: NoodleAdd
     },
     {
-      path: '/blog/edit/:blogId',
-      name: 'blog-edit',
-      component: BlogEdit
+      path: '/noodle/edit/:noodleId',
+      name: 'noodle-edit',
+      component: NoodleEdit
     },
     {
-      path: '/blog/:blogId',
-      name: 'blog',
-      component: BlogShow
+      path: '/noodle/:noodleId',
+      name: 'noodle',
+      component: NoodleShow
     },
     {
       path: '/comments',

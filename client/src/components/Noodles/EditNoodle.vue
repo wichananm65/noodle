@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h1>Edit Blog</h1>
-    <form v-on:submit.prevent="editBlog">
-      <p>title: <input type="text" v-model="blog.title" /></p>
+    <h1>Edit Noodle</h1>
+    <form v-on:submit.prevent="editNoodle">
+      <p>Brand: <input type="text" v-model="noodle.brand" /></p>
       <transition name="fade">
-        <div class="thumbnail-pic" v-if="blog.thumbnail != 'null'">
-          <img :src="BASE_URL + blog.thumbnail" alt="thumbnail" />
+        <div class="thumbnail-pic" v-if="noodle.thumbnail != 'null'">
+          <img :src="BASE_URL + noodle.thumbnail" alt="thumbnail" />
         </div>
       </transition>
       <form enctype="multipart/form-data" novalidate>
@@ -46,24 +46,23 @@
         </li>
       </transition-group>
       <div class="clearfix"></div>
-      <p><strong>content:</strong></p>
+      <p><strong>รสชาติ:</strong></p>
       <vue-ckeditor
-        v-model.lazy="blog.content"
+        v-model.lazy="noodle.taste"
         :config="config"
         @blur="onBlur($event)"
         @focus="onFocus($event)"
       />
-      <p>category: <input type="text" v-model="blog.category" /></p>
-      <p>status: <input type="text" v-model="blog.status" /></p>
+      <p>ผลิตที่: <input type="text" v-model="noodle.production" /></p>
       <p>
-        <button type="submit">update blog</button>
-        <button v-on:click="navigateTo('/blogs')">กลับ</button>
+        <button type="submit">update noodle</button>
+        <button v-on:click="navigateTo('/noodles')">กลับ</button>
       </p>
     </form>
   </div>
 </template>
 <script>
-import BlogsService from "@/services/BlogsService";
+import NoodlesService from "@/services/NoodlesService";
 import VueCkeditor from "vue-ckeditor2";
 import UploadService from "../../services/UploadService";
 
@@ -85,13 +84,12 @@ export default {
       uploadedFileNames: [],
       pictures: [],
       pictureIndex: 0,
-      blog: {
-        title: "",
+      noodle: {
+        brand: "",
         thumbnail: "null",
         pictures: "null",
-        content: "",
-        category: "",
-        status: "",
+        taste: "",
+        production: "",
       },
       config: {
         toolbar: [
@@ -119,11 +117,11 @@ export default {
         }
       }
     },
-    async editBlog() {
+    async editNoodle() {
       try {
-        await BlogsService.put(this.blog);
+        await NoodlesService.put(this.noodle);
         this.$router.push({
-          name: "blogs",
+          name: "noodles",
         });
       } catch (err) {
         console.log(err);
@@ -200,7 +198,7 @@ export default {
     },
     useThumbnail(filename) {
       console.log(filename);
-      this.blog.thumbnail = filename;
+      this.noodle.thumbnail = filename;
     },
   },
   computed: {
@@ -327,9 +325,9 @@ export default {
     ];
 
     try {
-      let blogId = this.$route.params.blogId;
-      this.blog = (await BlogsService.show(blogId)).data;
-      this.pictures = JSON.parse(this.blog.pictures);
+      let noodleId = this.$route.params.noodleId;
+      this.noodle = (await NoodlesService.show(noodleId)).data;
+      this.pictures = JSON.parse(this.noodle.pictures);
       this.pictureIndex = this.pictures.length;
     } catch (error) {
       console.log(error);
@@ -337,9 +335,9 @@ export default {
   },
   async mounted() {
     try {
-      let blogId = this.$route.params.blogId;
-      this.blog = (await BlogsService.show(blogId)).data;
-      this.pictures = JSON.parse(this.blog.pictures);
+      let noodleId = this.$route.params.noodleId;
+      this.noodle = (await NoodlesService.show(noodleId)).data;
+      this.pictures = JSON.parse(this.noodle.pictures);
     } catch (error) {
       console.log(error);
     }

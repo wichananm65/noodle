@@ -1,27 +1,28 @@
-const {User} = require('../models');
+const { User } = require('../models');
 
 module.exports = {
-    async index(req, res){
-        try{
+    async index(req, res) {
+        try {
             const users = await User.findAll();
             res.send(users);
-        } catch(err){
+        } catch (err) {
             res.status(500).send({
                 error: 'เกิดข้อผิดพลาดในการดึงข้อมูล user'
             })
         }
     },
-    async create(req, res){
+    // create user
+    async create(req, res) {
         try {
-            const user = await User.create(req.body);
-            res.send(user.toJSON());
+            const user = await User.create(req.body)
+            res.send(user.toJSON())
         } catch (err) {
-            res.status(400).send({
-                error: 'มีข้อผิดพลาดในการสร้าง user'
+            res.status(500).send({
+                error: 'User already in system'
             })
         }
     },
-    async put(req, res){
+    async put(req, res) {
         try {
             await User.update(req.body, {
                 where: {
@@ -35,31 +36,30 @@ module.exports = {
             })
         }
     },
-    async remove(req, res){
-        try{
+    async remove(req, res) {
+        try {
             const user = await User.findByPk(req.params.userId);
-            if(!user){
+            if (!user) {
                 return res.status(403).send({
                     error: 'ไม่มี user นี้ในระบบ'
                 })
             }
             await user.destroy();
             res.send(user);
-        }catch(err){
+        } catch (err) {
             res.status(500).send({
                 error: 'มีข้อผิดพลาดในการลบ user'
             })
         }
     },
-    async show(req, res){
-        try{
+    async show(req, res) {
+        try {
             const user = await User.findByPk(req.params.userId);
             res.send(user);
-        }catch(err){
+        } catch (err) {
             res.status(500).send({
                 error: 'มีข้อผิดพลาดในการดึงข้อมูล user'
             })
         }
     }
 }
-    
