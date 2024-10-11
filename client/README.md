@@ -1,6 +1,6 @@
-# noodle
+# nv-webblog-client
 
-> A Vue.js project
+> nodejs vuejs webblog client
 
 ## Build Setup
 
