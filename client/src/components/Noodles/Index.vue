@@ -1,63 +1,63 @@
 <template>
     <div>
-        <div class="blog-header">
-            <h2>ส่วนจัดการบลอ็ก</h2>
+        <div class="noodle-header">
+            <h2>ส่วนจัดการบะหมี่</h2>
             <div>
                 <form>
                     <input type="text" v-model="search" placeholder="Search">
                 </form>
             </div>
             <div>
-                <button v-on:click="navigateTo('/blog/create')">Create blog</button>
+                <button v-on:click="navigateTo('/noodle/create')">Create noodle</button>
                 <ul class="categories">
-                    <li v-for="cate in category" v-bind:key="cate.index">
-                        <a v-on:click.prevent="setCategory(cate)" href="#">{{ cate }}</a>
+                    <li v-for="cate in production" v-bind:key="cate.index">
+                        <a v-on:click.prevent="setProduction(cate)" href="#">{{ cate }}</a>
                     </li>
                     <li class="clear">
-                        <a v-on:click.prevent="setCategory(' ')" href="#">Clear</a>
+                        <a v-on:click.prevent="setProduction(' ')" href="#">Clear</a>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
 
-                <strong>จำนวน blog: </strong> {{ filteredBlogs.length }}
+                <strong>จำนวน noodle: </strong> {{ filteredNoodles.length }}
             </div>
             <br>
         </div>
 
-        <div v-if="filteredBlogs.length === 0 && loading === false" class="empty-blog">
+        <div v-if="filteredNoodles.length === 0 && loading === false" class="empty-noodle">
             *** ไม่มีข้อมูล ***
         </div>
 
-        <div id="blog-list-bottom">
-            <div class="blog-load-finished" v-if="blogs.length === filteredBlogs.length && filteredBlogs.length > 0 && loading === false">
+        <div id="noodle-list-bottom">
+            <div class="noodle-load-finished" v-if="noodles.length === filteredNoodles.length && filteredNoodles.length > 0 && loading === false">
                 โหลดข้อมูลครบแล้ว
             </div>
         </div>
 
         <transition-group name="fade">
-            <div v-for="blog in filteredBlogs" v-bind:key="blog.id" class="blog-list">
-                <div class="blog-pic">
-                    <div class="thumbnail-pic" v-if="blog.thumbnail !== 'null'">
-                        <img :src="BASE_URL + blog.thumbnail" alt="thumbnail">
+            <div v-for="noodle in filteredNoodles" v-bind:key="noodle.id" class="noodle-list">
+                <div class="noodle-pic">
+                    <div class="thumbnail-pic" v-if="noodle.thumbnail !== 'null'">
+                        <img :src="BASE_URL + noodle.thumbnail" alt="thumbnail">
                     </div>
                 </div>
-                <h3>{{ blog.title }}</h3>
-                <div v-html="blog.content.slice(0, 200) + '...'"></div>
-                <div class="blog-info">
-                    <p><strong>Category:</strong> {{ blog.category }}</p>
-                    <p><strong>Create:</strong> {{ blog.createdAt }}</p>
+                <h3>{{ noodle.brand }}</h3>
+                <div v-html="noodle.taste.slice(0, 200) + '...'"></div>
+                <div class="noodle-info">
+                    <p><strong>Production:</strong> {{ noodle.production }}</p>
+                    <p><strong>Create:</strong> {{ noodle.createdAt }}</p>
                     <p>
-                        <button v-on:click="navigateTo('/blog/' + blog.id)">ดู blog</button>
-                        <button v-on:click="navigateTo('/blog/edit/' + blog.id)">แก้ไข blog</button>
-                        <button v-on:click="deleteBlog(blog)">ลบข้อมูล</button>
+                        <button v-on:click="navigateTo('/noodle/' + noodle.id)">ดู noodle</button>
+                        <button v-on:click="navigateTo('/noodle/edit/' + noodle.id)">แก้ไข noodle</button>
+                        <button v-on:click="deleteNoodle(noodle)">ลบข้อมูล</button>
                     </p>
                 </div>
                 <div class="clearfix"></div>
             </div>
         </transition-group>
 
-        <div id="blog-list-bottom">
-            <div v-if="blogs.length === filteredBlogs.length && filteredBlogs.length > 0">
+        <div id="noodle-list-bottom">
+            <div v-if="noodles.length === filteredNoodles.length && filteredNoodles.length > 0">
                 โหลดข้อมูลครบแล้ว
             </div>
         </div>
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import BlogsService from '@/services/BlogsService'
+import NoodlesService from '@/services/NoodlesService'
 import _ from 'lodash'
 import ScrollMonitor from 'scrollMonitor'
 
@@ -74,7 +74,7 @@ let pageWatcher
 
 export default {
     updated() {
-        let sens = document.querySelector('#blog-list-bottom')
+        let sens = document.querySelector('#noodle-list-bottom')
         pageWatcher = ScrollMonitor.create(sens)
         pageWatcher.enterViewport(this.appendResults)
     },
@@ -92,18 +92,18 @@ export default {
         '$route.query.search': {
             immediate: true,
             async handler(value) {
-                this.blogs = []
+                this.noodles = []
                 this.results = []
                 this.loading = true
-                this.results = (await BlogsService.index(value)).data
+                this.results = (await NoodlesService.index(value)).data
                 this.appendResults()
-                this.results.forEach(blog => {
-                    if (this.category.length > 0) {
-                        if (this.category.indexOf(blog.category) === -1) {
-                            this.category.push(blog.category)
+                this.results.forEach(noodle => {
+                    if (this.production.length > 0) {
+                        if (this.production.indexOf(noodle.production) === -1) {
+                            this.production.push(noodle.production)
                         }
                     } else {
-                        this.category.push(blog.category)
+                        this.production.push(noodle.production)
                     }
                 })
                 this.loading = false
@@ -112,29 +112,29 @@ export default {
         }
     },
     computed: {
-        filteredBlogs() {
+        filteredNoodles() {
             if (this.search.trim() === '') {
                 return this.results;
             }
-            return this.results.filter(blog => {
-                return blog.title.toLowerCase().includes(this.search.toLowerCase()) ||
-                    blog.content.toLowerCase().includes(this.search.toLowerCase()) ||
-                    blog.category.toLowerCase().includes(this.search.toLowerCase());
+            return this.results.filter(noodle => {
+                return noodle.brand.toLowerCase().includes(this.search.toLowerCase()) ||
+                    noodle.taste.toLowerCase().includes(this.search.toLowerCase()) ||
+                    noodle.production.toLowerCase().includes(this.search.toLowerCase());
             });
         }
     },
     data() {
         return {
             BASE_URL: "http://localhost:8081/assets/uploads/",
-            blogs: [],
+            noodles: [],
             search: '',
             results: [],
-            category: [],
+            production: [],
             loading: false
         }
     },
     methods: {
-        setCategory(keyword) {
+        setProduction(keyword) {
             if (keyword === ' ') {
                 this.search = ''
                 console.log('clear search')
@@ -143,22 +143,22 @@ export default {
             }
         },
         appendResults() {
-            if (this.blogs.length < this.results.length) {
+            if (this.noodles.length < this.results.length) {
                 let toAppend = this.results.slice(
-                    this.blogs.length,
-                    LOAD_NUM + this.blogs.length
+                    this.noodles.length,
+                    LOAD_NUM + this.noodles.length
                 )
-                this.blogs = this.blogs.concat(toAppend)
+                this.noodles = this.noodles.concat(toAppend)
             }
         },
         navigateTo(route) {
             this.$router.push(route)
         },
-        async deleteBlog(blog) {
+        async deleteNoodle(noodle) {
             let result = confirm("Want to delete?")
             if (result) {
                 try {
-                    await BlogsService.delete(blog)
+                    await NoodlesService.delete(noodle)
                     this.refreshData()
                 } catch (err) {
                     console.log(err)
@@ -166,14 +166,14 @@ export default {
             }
         },
         async refreshData() {
-            this.blogs = (await BlogsService.index()).data
+            this.noodles = (await NoodlesService.index()).data
         }
     }
 }
 </script>
 
 <style scoped>
-.empty-blog {
+.empty-noodle {
     width: 100%;
     text-align: center;
     padding: 10px;
@@ -186,11 +186,11 @@ export default {
     padding: 5px 10px 0px 0px;
 }
 
-.blog-info {
+.noodle-info {
     float: left;
 }
 
-.blog-pic {
+.noodle-pic {
     float: left;
 }
 
@@ -198,7 +198,7 @@ export default {
     clear: both;
 }
 
-.blog-list {
+.noodle-list {
     border: solid 1px #dfdfdf;
     margin-bottom: 10px;
     max-width: 900px;
@@ -208,17 +208,17 @@ export default {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
 }
 
-.blog-header {
+.noodle-header {
     max-width: 900px;
     margin-left: auto;
     margin-right: auto;
 }
 
-#blog-list-bottom {
+#noodle-list-bottom {
     padding-top: 4px;
 }
 
-.blog-load-finished {
+.noodle-load-finished {
     padding: 4px;
     text-align: center;
     background: seagreen;

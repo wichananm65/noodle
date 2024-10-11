@@ -2,11 +2,9 @@
   <div>
     <div class="nv-navbar">
       <ul class="nav">
-        <li><router-link :to="{ name: 'blogs' }">Blogs</router-link></li>
-        <li><router-link :to="{ name: 'users' }">Users</router-link></li>
+        <li><router-link :to="{ name: 'noodles' }">Noodles</router-link></li>
         <li><router-link :to="{ name: 'comments' }">Comments</router-link></li>
         <!-- if isLogin is true, show logout menu. otherwise, show login menu-->
-        <li><router-link :to="{ name: 'login' }">Login</router-link></li>  
       </ul>
     </div>
   </div>
@@ -16,13 +14,7 @@
 export default {
 
   methods:{
-    isLogin(){
-      return this.$store.getters.isUserLoggedIn;
-    },
-    logout(){
-      this.$store.dispatch('logout');
-      this.$router.push({name: 'login'});
-    }
+    
   }
 };
 </script>
